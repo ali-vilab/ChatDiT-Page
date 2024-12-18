@@ -1,0 +1,6 @@
+@article{lhhuang2024chatdit,
+  title={ChatDiT: A Training-Free Baseline for Task-Agnostic Free-Form Chatting with Diffusion Transformers},
+  author={Huang, Lianghua and Wang, Wei and Wu, Zhi-Fan and Shi, Yupeng and Liang, Chen and Shen, Tong and Zhang, Han and Dou, Huanzhang and Liu, Yu and Zhou, Jingren},
+  booktitle={arXiv preprint arxiv:2412.12571},
+  year={2024}
+}

@@ -1,0 +1,203 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>ChatDiT: A Training-Free Baseline for Task-Agnostic Free-Form Chatting with Diffusion Transformers</title>
+  <link href="./style.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="#home" class="nav-link">Home</a></li>
+      <li><a href="#abstract" class="nav-link">Abstract</a></li>
+      <li><a href="#single-round-chat" class="nav-link">Single-Round Chat</a></li>
+      <li><a href="#multi-round-chat" class="nav-link">Multi-Round Chat</a></li>
+      <li><a href="#illustrated-article-generation" class="nav-link">Illustrated Article Generation</a></li>
+      <li><a href="#comparison" class="nav-link">Comparison with Existing Approaches</a></li>
+      <li><a href="#architecture" class="nav-link">Architecture</a></li>
+      <li><a href="#bibtex" class="nav-link">BibTex</a></li>
+    </ul>
+  </nav>
+
+  <div class="content" id="home">
+    <h1><strong>
+      ChatDiT: A Training-Free Baseline for Task-Agnostic Free-Form Chatting with Diffusion Transformers
+      </strong></h1>
+    <p id="authors">
+      <span><a href=""></a></span>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Lianghua Huang</a>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Wei Wang</a>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Zhi-Fan Wu</a>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Yupeng Shi</a>
+      <span style="display: block; height: 8px;"></span>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Chen Liang</a>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Tong Shen</a>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Han Zhang</a>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Huanzhang Dou</a>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Yu Liu</a>
+      <a href="" style="pointer-events: none; text-decoration:none; color: black;">Jingren Zhou</a>
+      <br><br>
+      <span style="font-size: 22px;">Tongyi Lab</span>
+    </p>
+
+    <p style="text-align: center; font-size: 20px;">
+      <a href="http://arxiv.org/abs/2412.12571" target="_blank">[Paper]</a>
+      &nbsp;&nbsp;&nbsp;
+      <a href="./bibtex.txt" target="_blank">[BibTeX]</a>
+      &nbsp;&nbsp;&nbsp;
+      <a href="https://github.com/ali-vilab/ChatDiT" target="_blank">[Code]</a>
+    </p>
+
+    <pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 8px; font-size: 16px; line-height: 1.6;">
+    <span style="color: #f1fa8c;">chatdit</span> = ChatDiT()
+
+    <span style="color: #8be9fd;"># Text-to-Image(s) & {Text+Image(s)}-to-Image(s)</span>
+    <span style="color: #f1fa8c;">images, history</span> = chatdit.chat(<span style="color: #ff79c6;">message</span>, <span style="color: #ff79c6;">input_images</span>=<span style="color: #40c84d;">[]</span>, <span style="color: #ff79c6;">history</span>=<span style="color: #40c84d;">[]</span>)
+
+    <span style="color: #8be9fd;"># Text-to-{Text+Image(s)} (Interleaved) & {Text+Image(s)}-to-{Text+Image(s)} (Interleaved)</span>
+    <span style="color: #f1fa8c;">article</span>, <span style="color: #f1fa8c;">history</span> = chatdit.chat(<span style="color: #ff79c6;">message</span>, <span style="color: #ff79c6;">input_images</span>=<span style="color: #40c84d;">[]</span>, <span style="color: #ff79c6;">history</span>=<span style="color: #40c84d;">[]</span>, <span style="color: #ff79c6;">return_markdown</span>=<span style="color: #40c84d;">True</span>)</pre>
+    
+    <p style="text-align: center; font-size: 18px;">
+      <em>
+        ChatDiT is a zero-shot, general-purpose, and interative visual generation framework built directly upon pretrained diffusion transformers (DiTs) with <strong>no additional tuning, adapters, or modifications</strong>.
+      </em>
+    </p>
+
+    <p style="text-align: center; font-size: 18px;">
+      <em>
+        With its intuitive interface, ChatDiT enables seamless multi-round, free-form conversations with DiTs. It supports referencing zero to multiple images to generate a new set of images, or, if desired, a fully illustrated article in response.
+      </em>
+    </p>
+
+    <!-- <p style="text-align: center; font-size: 18px;">
+      <em>
+        ChatDiT outperforms all competitors on <a href="https://ali-vilab.github.io/IDEA-Bench-Page/" target="_blank">IDEA-Bench</a>, achieving the highest overall score across 100 design tasks encompassing 275 cases. However, it’s important to note that its <strong>Top-1</strong> score remains relatively modest at <strong>23.19 out of 100</strong>. This emphasizes the ongoing challenges in bridging the gap for <strong>general-purpose visual generation</strong>.
+      </em>
+    </p> -->
+  </div>
+
+  <div class="content" id="abstract">
+    <h2 style="text-align: center;">Abstract</h2>
+    <p>
+      Recent research [<a href="https://arxiv.org/abs/2410.15027" target="_blank">Huang et al., 2024a</a>,<a href="https://ali-vilab.github.io/In-Context-LoRA-Page/" target="_blank">b</a>] has highlighted the inherent in-context generation capabilities of pretrained diffusion transformers (DiTs), enabling them to seamlessly adapt to diverse visual tasks with minimal or no architectural modifications. These capabilities are unlocked by concatenating self-attention tokens across multiple input and target images, combined with grouped and masked generation pipelines. Building upon this foundation, we present ChatDiT, <strong style="color: #ff6f61;">a zero-shot, general-purpose, and interactive visual generation framework</strong> that leverages pretrained diffusion transformers in their original form, requiring <strong style="color: #ff6f61;">no additional tuning, adapters, or modifications</strong>. Users can interact with ChatDiT to create interleaved text-image articles, multi-page picture books, edit images, design IP derivatives, or develop character design settings, all through free-form natural language across one or more conversational rounds. At its core, ChatDiT employs a multi-agent system comprising three key components: an <em>Instruction-Parsing agent</em> that interprets user-uploaded images and instructions, a <em>Strategy-Planning agent</em> that devises single-step or multi-step generation actions, and an <em>Execution agent</em> that performs these actions using an in-context toolkit of diffusion transformers. We thoroughly evaluate ChatDiT on a benchmark of 100 real-world design tasks, spanning 275 cases with diverse instructions and varying numbers of input and target images. Despite its simplicity and training-free approach, ChatDiT surpasses all competitors, including those specifically designed and trained on extensive multi-task datasets. While this work highlights the untapped potential of pretrained text-to-image models for zero-shot task generalization, we also note that ChatDiT's Top-1 performance on <a href="https://ali-vilab.github.io/ChatDiT/" target="_blank">IDEA-Bench</a> achieves a score of <strong style="color: #ff6f61;">23.19</strong> out of 100, reflecting challenges in fully exploiting DiTs for general-purpose generation. We further identify key limitations of pretrained DiTs in adapting to certain tasks. We release all code, agents, results, and intermediate outputs to facilitate further research at <a href="https://github.com/ali-vilab/ChatDiT" target="_blank">here</a>.
+    </p>
+  </div>
+
+  <div class="content" id="single-round-chat">
+    <h2>Single-Round Chat</h2>
+
+    <p style="font-size: 18px">
+      ChatDiT allows users to provide natural language instructions along with zero or more uploaded images as input. Based on these inputs, it automatically generates a set of images, determining both the number and content of the outputs dynamically. The examples below showcase ChatDiT's selected results on <a href="https://ali-vilab.github.io/IDEA-Bench-Page/" target="_blank">IDEA-Bench</a>. The user messages here are condensed summaries of the original detailed instructions to conserve space.
+    </p><br>
+
+    <img class="summary-img"
+      src="https://img.alicdn.com/imgextra/i1/O1CN01yAMgGI1Xq8v058wkC_!!6000000002974-0-tps-4140-11064.jpg"
+      style="width:100%;">
+  </div>
+
+  <div class="content" id="multi-round-chat">
+    <h2>Multi-Round Chat</h2>
+
+    <p style="font-size: 18px">
+      ChatDiT allows users to provide natural language instructions along with zero or more uploaded images as input. Based on these inputs, it automatically generates a set of images, determining both the number and content of the outputs dynamically. The examples below showcase ChatDiT's selected results on <a href="https://ali-vilab.github.io/ChatDiT/" target="_blank">IDEA-Bench</a>. The user messages here are condensed summaries of the original detailed instructions to conserve space.
+    </p><br>
+
+    <img class="summary-img"
+      src="https://img.alicdn.com/imgextra/i2/O1CN01jSedtc1tuBy4mbc6C_!!6000000005961-0-tps-4104-5229.jpg"
+      style="width:100%;">
+  </div>
+
+  <div class="content" id="illustrated-article-generation">
+    <h2>Illustrated Article Generation</h2>
+
+    <p style="font-size: 18px">
+      ChatDiT allows users to provide natural language instructions along with zero or more uploaded images as input. Based on these inputs, it automatically generates a set of images, determining both the number and content of the outputs dynamically. The examples below showcase ChatDiT's selected results on <a href="https://ali-vilab.github.io/ChatDiT/" target="_blank">IDEA-Bench</a>. The user messages here are condensed summaries of the original detailed instructions to conserve space.
+    </p><br>
+
+    <img class="summary-img"
+      src="https://img.alicdn.com/imgextra/i4/O1CN01npcP7L1guZI12fVOY_!!6000000004202-0-tps-4131-10488.jpg"
+      style="width:100%;">
+  </div>
+
+  <div class="content" id="comparison">
+    <h2>Comparison with Existing Approaches</h2>
+
+    <p style="font-size: 18px">
+      A comparison of selected cases of ChatDiT with top-performing approaches on <a href="https://ali-vilab.github.io/IDEA-Bench-Page/" target="_blank">IDEA-Bench</a>, using varied instructions and input-output settings. For further analysis and details, please refer to our <a href="http://arxiv.org/abs/2412.12571" target="_blank">paper</a>.
+    </p><br>
+
+    <img class="summary-img"
+      src="https://img.alicdn.com/imgextra/i1/O1CN01qtg5DI1dU3VzoDcx2_!!6000000003738-0-tps-4961-3666.jpg"
+      style="width:100%;">
+    <br>
+    
+    <p style="font-size: 18px">
+      Overall performance comparison on <a href="https://ali-vilab.github.io/IDEA-Bench-Page/" target="_blank">IDEA-Bench</a>.
+    </p><br>
+      <img class="summary-img"
+        src="https://img.alicdn.com/imgextra/i2/O1CN0109p8j01HBLn4A6stA_!!6000000000719-2-tps-2400-1600.png"
+        style="width:80%;">
+  </div>
+
+  <div class="content" id="architecture">
+    <h2>Architecture</h2>
+
+    <p style="font-size: 18px">
+      Overview of the ChatDiT multi-agent framework. The framework consists of three core agents operating sequentially: the <em>Instruction-Parsing Agent</em> interprets user instructions and analyzes inputs, the <em>Strategy-Planning Agent</em> formulates in-context generation strategies, and the <em>Execution Agent</em> performs the planned actions using the <strong>in-context toolkit</strong> of pretrained diffusion transformers. An optional <em>Markdown Agent</em> integrates the outputs into cohesive, illustrated articles. Sub-agents handle specialized tasks within each core agent, ensuring flexibility and precision in generation. For more implementation details, please refer to our <a href="http://arxiv.org/abs/2412.12571" target="_blank">paper</a>.
+    </p><br>
+
+    <img class="summary-img"
+      src="https://img.alicdn.com/imgextra/i1/O1CN010Htcn91jKnCMQ9UUW_!!6000000004530-0-tps-2974-666.jpg"
+      style="width:100%;">
+  </div>
+
+  <div class="content" id="bibtex">
+    <h2>BibTex</h2>
+    <code> @article{lhhuang2024chatdit,<br>
+          &nbsp;&nbsp;title={ChatDiT: A Training-Free Baseline for Task-Agnostic Free-Form Chatting with Diffusion Transformers},<br>
+          &nbsp;&nbsp;author={Huang, Lianghua and Wang, Wei and Wu, Zhi-Fan and Shi, Yupeng and Liang, Chen and Shen, Tong and Zhang, Han and Dou, Huanzhang and Liu, Yu and Zhou, Jingren},<br>
+          &nbsp;&nbsp;booktitle={arXiv preprint arxiv:2412.12571},<br>
+          &nbsp;&nbsp;year={2024}<br>
+          } </code>
+  </div>
+
+  <br><br>
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <!-- <div class="content"> -->
+        website template from <a href="https://ali-vilab.github.io/composer-page/" target="_blank">composer</a>
+        <!-- </div> -->
+      </div>
+    </div>
+  </footer>
+  <br><br>
+
+  <script>
+    // JavaScript to detect section visibility and apply active class to navbar items
+    const sections = document.querySelectorAll('.content');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const id = entry.target.id;
+        const navLink = document.querySelector(`a[href="#${id}"]`);
+
+        if (entry.isIntersecting) {
+          navLink.classList.add('active');
+        } else {
+          navLink.classList.remove('active');
+        }
+      });
+    }, {
+      threshold: 0.15 // Trigger when 30% of the section is visible
+    });
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+
+</html>
